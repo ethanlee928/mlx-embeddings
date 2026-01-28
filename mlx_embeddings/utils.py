@@ -17,6 +17,7 @@ from huggingface_hub import snapshot_download
 from huggingface_hub.errors import RepositoryNotFoundError
 from mlx.utils import tree_flatten, tree_unflatten
 from transformers import AutoProcessor, PreTrainedTokenizer
+from colpali_engine.models import ColQwen2_5_Processor
 
 from .tokenizer_utils import TokenizerWrapper, load_tokenizer
 
@@ -256,7 +257,10 @@ def load(
     # First attempt: load tokenizer
     try:
         if hasattr(model.config, "vision_config"):
-            tokenizer = AutoProcessor.from_pretrained(model_path)
+            if hasattr(model.config, "model_type") and model.config.model_type == "colqwen2_5":
+                tokenizer = ColQwen2_5_Processor.from_pretrained(model_path)
+            else:
+                tokenizer = AutoProcessor.from_pretrained(model_path, trust_remote_code=True)
         else:
             tokenizer = load_tokenizer(model_path, tokenizer_config)
     except Exception as tokenizer_error:
