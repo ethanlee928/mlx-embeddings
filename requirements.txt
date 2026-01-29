@@ -1,5 +1,4 @@
 mlx>=0.16.3
-mlx-vlm>=0.1.21
+git+https://github.com/ethanlee928/mlx-vlm.git
 transformers[sentencepiece]>=4.44.0
 huggingface-hub>=0.25.1
-colpali-engine==0.3.13
